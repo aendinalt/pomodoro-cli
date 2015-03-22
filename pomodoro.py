@@ -3,13 +3,14 @@
 __author__ = 'aen'
 
 import pygame
-import sys
-import time
+import sys, os
 from pygame.locals import *
 
 
 def pomodoro():
+    pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=512)
     pygame.init()
+
 
     #  set up the window
     font = pygame.font.Font(None, 72)  # initialize a font
@@ -22,6 +23,13 @@ def pomodoro():
     gree = (0, 255, 0)
     dark_green = (0, 100, 0)
     blue = (0, 0, 255)
+
+    #  define a sounds
+    global pomo_start_sound, pomo_tick_sound, pomo_end_sound
+    pomo_start_sound = pygame.mixer.Sound('sounds/pomo_start.wav')
+    print pomo_start_sound.get_length()
+    pomo_tick_sound = pygame.mixer.Sound('sounds/pomo_tick.wav')
+    pomo_end_sound = pygame.mixer.Sound('sounds/pomo_ring.wav')
 
     #  define a defaults
     pomodoro_time = 25
@@ -44,19 +52,9 @@ def pomodoro():
 
     #  create background
     background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill(dark_green)
-
-    background.blit(icon, ((d_width-256)/2, (d_height-256)/2))
-
-    background.blit(pomo_start_icon, (start_icon_x, start_icon_y))
-    background.blit(pomo_stop_icon, (stop_icon_x, stop_icon_y))
-
-    screen.blit(background, (0, 0))
 
     while True:  # main loop
-        text = font.render(str(pomodoro_time), 1, dark_green)
-        background.blit(text, ((d_width-54)/2, (d_height-50)/2))
+
         for event in pygame.event.get():
             # print event
             if event.type == QUIT:
@@ -80,6 +78,20 @@ def pomodoro():
                 if timeleft == 0:
                     pomodoro_end()
                     in_pomodoro = False
+
+        # draw section
+        background.fill(dark_green)
+        background.blit(icon, ((d_width-256)/2, (d_height-256)/2))
+        if in_pomodoro:
+            background.blit(pomo_stop_icon, (stop_icon_x, stop_icon_y))
+            text = font.render(str(timeleft), 1, dark_green)
+            background.blit(text, ((d_width-54)/2, (d_height-50)/2))
+        elif not in_pomodoro:
+            background.blit(pomo_start_icon, (start_icon_x, start_icon_y))
+
+        background = background.convert()
+        screen.blit(background, (0, 0))
+
         pygame.display.flip()
         pygame.display.update()
 
@@ -100,12 +112,9 @@ def click_on_stop(click_x, click_y, stop_icon_x, stop_icon_y):
         return False
 
 
-def pomodoro_end():
-    print "End Pomorodo"
-    pygame.time.set_timer(USEREVENT + 1, 0)
-
-
 def pomodoro_run(pomodoro_time):
+    pomo_start_sound.play()
+
     timeleft = pomodoro_time
     pygame.time.set_timer(USEREVENT + 1, 1000)
     print "Start Pomodoro"
@@ -117,6 +126,11 @@ def pomodoro_stop():
     print "Stop Pomodoro"
     pygame.time.set_timer(USEREVENT + 1, 0)
 
+
+def pomodoro_end():
+    print "End Pomorodo"
+    pomo_end_sound.play()
+    pygame.time.set_timer(USEREVENT + 1, 0)
 
 if __name__ == '__main__':
     pomodoro()
