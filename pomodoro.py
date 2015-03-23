@@ -3,14 +3,13 @@
 __author__ = 'aen'
 
 import pygame
-import sys, os
-from pygame.locals import *
+import sys
+from pygame.locals import USEREVENT, QUIT, MOUSEBUTTONDOWN
 
 
 def pomodoro():
     pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, buffer=512)
     pygame.init()
-
 
     #  set up the window
     font = pygame.font.Font(None, 72)  # initialize a font
@@ -27,7 +26,6 @@ def pomodoro():
     #  define a sounds
     global pomo_start_sound, pomo_tick_sound, pomo_end_sound
     pomo_start_sound = pygame.mixer.Sound('sounds/pomo_start.wav')
-    print pomo_start_sound.get_length()
     pomo_tick_sound = pygame.mixer.Sound('sounds/pomo_tick.wav')
     pomo_end_sound = pygame.mixer.Sound('sounds/pomo_ring.wav')
 
@@ -79,6 +77,9 @@ def pomodoro():
                     pomodoro_end()
                     in_pomodoro = False
 
+            if event.type == USEREVENT +2:
+                pomo_tick_sound.play()
+
         # draw section
         background.fill(dark_green)
         background.blit(icon, ((d_width-256)/2, (d_height-256)/2))
@@ -114,23 +115,23 @@ def click_on_stop(click_x, click_y, stop_icon_x, stop_icon_y):
 
 def pomodoro_run(pomodoro_time):
     pomo_start_sound.play()
-
     timeleft = pomodoro_time
     pygame.time.set_timer(USEREVENT + 1, 1000)
+    pygame.time.set_timer(USEREVENT + 2, 867)
     print "Start Pomodoro"
     return timeleft
     # play start sound
 
 
 def pomodoro_stop():
-    print "Stop Pomodoro"
     pygame.time.set_timer(USEREVENT + 1, 0)
+    pygame.time.set_timer(USEREVENT + 2, 0)
 
 
 def pomodoro_end():
-    print "End Pomorodo"
     pomo_end_sound.play()
-    pygame.time.set_timer(USEREVENT + 1, 0)
+    pomodoro_stop()
+
 
 if __name__ == '__main__':
     pomodoro()
