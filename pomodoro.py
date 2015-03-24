@@ -12,7 +12,7 @@ def pomodoro():
     pygame.init()
 
     #  set up the window
-    font = pygame.font.Font(None, 72)  # initialize a font
+    font = pygame.font.Font('freesansbold.ttf', 72)  # initialize a font
 
     #  define a colors
     black = (0, 0, 0)
