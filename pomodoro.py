@@ -72,7 +72,6 @@ def pomodoro():
             if event.type == USEREVENT + 1:
                 timeleft -= 1
                 text = font.render(str(timeleft), 1, dark_green)
-                print timeleft
                 if timeleft == 0:
                     pomodoro_end()
                     in_pomodoro = False
@@ -118,9 +117,7 @@ def pomodoro_run(pomodoro_time):
     timeleft = pomodoro_time
     pygame.time.set_timer(USEREVENT + 1, 1000)
     pygame.time.set_timer(USEREVENT + 2, 867)
-    print "Start Pomodoro"
     return timeleft
-    # play start sound
 
 
 def pomodoro_stop():
