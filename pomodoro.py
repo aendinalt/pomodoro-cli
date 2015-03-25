@@ -115,7 +115,7 @@ def click_on_stop(click_x, click_y, stop_icon_x, stop_icon_y):
 def pomodoro_run(pomodoro_time):
     pomo_start_sound.play()
     timeleft = pomodoro_time
-    pygame.time.set_timer(USEREVENT + 1, 1000)
+    pygame.time.set_timer(USEREVENT + 1, 1000 * 60)
     pygame.time.set_timer(USEREVENT + 2, 867)
     return timeleft
 
