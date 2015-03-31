@@ -45,7 +45,7 @@ def pomodoro():
     pygame.display.set_caption('Pymodoro!')
     pomo_start_icon = pygame.image.load(image_dir + 'pomo_start.png')
     pomo_stop_icon = pygame.image.load(image_dir + 'pomo_stop.png')
-    icon = pygame.image.load(image_dir + 'largeicon.ico')
+    icon = pygame.image.load(image_dir + 'largeicon.png')
     pygame.display.set_icon(icon)
 
     #  create background
